@@ -4,6 +4,13 @@
 
 ### Design
 
+Scroll behaviour : One item at a time or by row ?
+-> decided to do it by row, the Netflix way
+
+Figma's design contains invisible frames, is it a mistake or something I don't understand ?
+
+![Alt text](image.png)
+
 ### Code
 
 ### API
