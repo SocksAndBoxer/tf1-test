@@ -13,7 +13,8 @@
     "@apollo/client": "^3.8.6",
     "graphql": "^16.8.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "styled-components": "^6.1.0"
   },
   "devDependencies": {
     "@graphql-eslint/eslint-plugin": "^3.20.1",
@@ -27,5 +28,8 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "typescript": "^5.2.2",
     "vite": "^4.4.5"
+  },
+  "resolutions": {
+    "styled-components": "^5"
   }
 }
