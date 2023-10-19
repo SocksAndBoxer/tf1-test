@@ -1,18 +1,40 @@
 import { useQuery } from '@apollo/client'
 import { TProgam } from './types/program'
 import QUERY_PROGRAMS from './graphql/program'
+import { useState } from 'react'
+import Slider from './components/Slider/Slider'
 
 function App() {
-  const { loading, error, data } = useQuery<TProgam[]>(QUERY_PROGRAMS, {
-    variables: {
-      limit: 1,
-      offset: 0,
-    },
+  const [initialVariables, setInitialVariables] = useState({
+    limit: 12,
+    offset: 0,
   })
 
-  console.log(data, error, loading)
+  const { loading, error, data, refetch } = useQuery<TProgam[]>(
+    QUERY_PROGRAMS,
+    {
+      variables: initialVariables,
+    }
+  )
 
-  return <div>Hello TF1</div>
+  console.log('1', data, error, loading)
+
+  return (
+    <Slider itemLength={6}>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+    </Slider>
+  )
 }
 
 export default App
