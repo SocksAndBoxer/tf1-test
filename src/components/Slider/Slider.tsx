@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useRef } from 'react'
 import { styled } from 'styled-components'
 import LeftArrow from '../../assets/svg/left-arrow.svg'
 import RightArrow from '../../assets/svg/right-arrow.svg'
@@ -9,13 +9,37 @@ type SliderProps = {
 }
 
 const Slider = ({ children, itemLength }: SliderProps) => {
+  const sliderRef: React.RefObject<HTMLDivElement> = useRef(null)
+
+  const scrollX = (direction = 'right') => {
+    if (sliderRef.current) {
+      const { clientWidth } = sliderRef.current
+
+      sliderRef.current.scrollTo({
+        left:
+          direction === 'right'
+            ? sliderRef.current.scrollLeft + clientWidth
+            : sliderRef.current.scrollLeft - clientWidth,
+        behavior: 'smooth',
+      })
+    }
+  }
+
   return (
-    <SliderWrapper $width={`${itemLength * 200}px`}>
-      <ArrowContainer onClick={} $position={'left'} className='arrow'>
+    <SliderWrapper $width={`${itemLength * 200 + 144}px`}>
+      <ArrowContainer
+        onClick={() => scrollX('left')}
+        $position={'left'}
+        className='arrow'
+      >
         <img src={LeftArrow} alt='Left arrow' />
       </ArrowContainer>
-      {children}
-      <ArrowContainer onClick={} $position={'right'} className='arrow'>
+      <SliderItems ref={sliderRef}>{children}</SliderItems>
+      <ArrowContainer
+        onClick={() => scrollX()}
+        $position={'right'}
+        className='arrow'
+      >
         <img src={RightArrow} alt='Right arrow' />
       </ArrowContainer>
     </SliderWrapper>
@@ -23,22 +47,25 @@ const Slider = ({ children, itemLength }: SliderProps) => {
 }
 
 const SliderWrapper = styled.div<{ $width: string }>`
-  display: flex;
-  gap: 16px;
   width: ${props => props.$width};
-  flex-grow: grow;
   margin: 0 auto;
+  position: relative;
+  height: 266px;
+`
+
+const SliderItems = styled.div`
+  display: flex;
+  gap: 24px;
+  flex-grow: grow;
   overflow: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  position: relative;
-  height: 266px;
 
   &::-webkit-scrollbar {
     display: none;
   }
 
-  & > div:not(.arrow) {
+  & > div {
     min-width: 200px;
   }
 `
