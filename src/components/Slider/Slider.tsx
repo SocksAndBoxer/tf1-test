@@ -1,19 +1,26 @@
-import React, { ReactNode, useRef } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { styled } from 'styled-components'
 import LeftArrow from '../../assets/svg/left-arrow.svg'
 import RightArrow from '../../assets/svg/right-arrow.svg'
+import { useDebounce } from '../../hooks/useDebounce'
 
 type SliderProps = {
-  children: ReactNode
+  children: ReactNode[]
   itemLength: number
   itemWidth: number
 }
 
 const Slider = ({ children, itemLength, itemWidth }: SliderProps) => {
+  const [position, setPosition] = useState(0)
+  const [hasDebounced, setHasDebounced] = useState(true)
+  const containerRef: React.RefObject<HTMLDivElement> = useRef(null)
   const sliderRef: React.RefObject<HTMLDivElement> = useRef(null)
+  const sliderWidth: number = itemLength * itemWidth + 144
+  const pagesLength: number = Math.ceil(children.length / 6) - 1
+  const debouncedPosition = useDebounce(position, 500)
 
   const scrollX = (nextPage = true) => {
-    if (sliderRef.current) {
+    if (sliderRef.current && hasDebounced) {
       const { clientWidth } = sliderRef.current
 
       sliderRef.current.scrollTo({
@@ -22,28 +29,40 @@ const Slider = ({ children, itemLength, itemWidth }: SliderProps) => {
           : sliderRef.current.scrollLeft - clientWidth,
         behavior: 'smooth',
       })
+
+      setPosition(prevPosition =>
+        nextPage ? (prevPosition += 1) : (prevPosition -= 1)
+      )
+
+      setHasDebounced(false)
     }
   }
 
-  const handleClick = (nextPage = true) => {}
+  useEffect(() => {
+    setHasDebounced(true)
+  }, [debouncedPosition])
 
   return (
-    <SliderWrapper $width={`${itemLength * itemWidth + 144}px`}>
-      <ArrowContainer
-        onClick={() => scrollX(false)}
-        $position={'left'}
-        className='arrow'
-      >
-        <img src={LeftArrow} alt='Left arrow' />
-      </ArrowContainer>
+    <SliderWrapper ref={containerRef} $width={`${sliderWidth}px`}>
+      {position > 0 && (
+        <ArrowContainer
+          onClick={() => scrollX(false)}
+          $position={'left'}
+          className='arrow'
+        >
+          <img src={LeftArrow} alt='Left arrow' />
+        </ArrowContainer>
+      )}
       <SliderItems ref={sliderRef}>{children}</SliderItems>
-      <ArrowContainer
-        onClick={() => scrollX()}
-        $position={'right'}
-        className='arrow'
-      >
-        <img src={RightArrow} alt='Right arrow' />
-      </ArrowContainer>
+      {position < pagesLength && (
+        <ArrowContainer
+          onClick={() => scrollX()}
+          $position={'right'}
+          className='arrow'
+        >
+          <img src={RightArrow} alt='Right arrow' />
+        </ArrowContainer>
+      )}
     </SliderWrapper>
   )
 }
