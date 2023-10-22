@@ -5,7 +5,16 @@
 ### Run the project
 
 yarn
+
+**then**
+
 yarn dev
+
+**or**
+
+yarn build
+
+yarn preview
 
 ### Design
 
