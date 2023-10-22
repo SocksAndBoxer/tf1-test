@@ -4,6 +4,7 @@ import QUERY_PROGRAMS from './graphql/program'
 import Slider from './components/Slider/Slider'
 import { styled } from 'styled-components'
 import Program from './components/Program/Program'
+import Loader from './components/Loader/Loader'
 
 function App() {
   const {
@@ -12,29 +13,29 @@ function App() {
     data: dataPrograms,
   } = useQuery<{ program: TProgam[] }>(QUERY_PROGRAMS)
 
-  if (loading) {
-    return <div>Loading...</div>
-  }
-
   if (error) {
     return <div>An error occured</div>
   }
 
   return (
     <SliderContainer>
-      <Slider
-        childrenLength={dataPrograms?.program.length || 0}
-        itemWidth={200}
-        itemLength={6}
-      >
-        {dataPrograms?.program.map(program => (
-          <Program
-            key={program.name}
-            thumnail={program.thumnail}
-            name={program.name}
-          />
-        ))}
-      </Slider>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Slider
+          childrenLength={dataPrograms?.program.length || 0}
+          itemWidth={200}
+          itemLength={6}
+        >
+          {dataPrograms?.program.map(program => (
+            <Program
+              key={program.name}
+              thumnail={program.thumnail}
+              name={program.name}
+            />
+          ))}
+        </Slider>
+      )}
     </SliderContainer>
   )
 }
