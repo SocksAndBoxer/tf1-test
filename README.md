@@ -19,3 +19,5 @@ Why put thumbnail inside program, program inside thumnail instead creating 'infi
 -> maybe just put the ids ?
 
 typo on thumnail (thumbnail)
+
+program query is singular but returns multiple programs, it should be called programs in my opinion

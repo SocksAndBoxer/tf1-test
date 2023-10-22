@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 const QUERY_PROGRAMS = gql`
-  query getPrograms($limit: Int!, $offset: Int!) {
+  query getPrograms($limit: Int, $offset: Int) {
     program(limit: $limit, offset: $offset) {
       id
       name
