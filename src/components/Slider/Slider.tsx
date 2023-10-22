@@ -1,22 +1,28 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { styled } from 'styled-components'
+import { useDebounce } from '../../hooks/useDebounce'
 import LeftArrow from '../../assets/svg/left-arrow.svg'
 import RightArrow from '../../assets/svg/right-arrow.svg'
-import { useDebounce } from '../../hooks/useDebounce'
 
 type SliderProps = {
-  children: ReactNode[]
+  children: ReactNode
   itemLength: number
   itemWidth: number
+  childrenLength: number
 }
 
-const Slider = ({ children, itemLength, itemWidth }: SliderProps) => {
+const Slider = ({
+  children,
+  itemLength,
+  itemWidth,
+  childrenLength,
+}: SliderProps) => {
   const [position, setPosition] = useState(0)
   const [hasDebounced, setHasDebounced] = useState(true)
   const containerRef: React.RefObject<HTMLDivElement> = useRef(null)
   const sliderRef: React.RefObject<HTMLDivElement> = useRef(null)
   const sliderWidth: number = itemLength * itemWidth + 144
-  const pagesLength: number = Math.ceil(children.length / 6) - 1
+  const pagesLength: number = Math.ceil(childrenLength / 6) - 1
   const debouncedPosition = useDebounce(position, 500)
 
   const scrollX = (nextPage = true) => {
@@ -41,6 +47,10 @@ const Slider = ({ children, itemLength, itemWidth }: SliderProps) => {
   useEffect(() => {
     setHasDebounced(true)
   }, [debouncedPosition])
+
+  if (childrenLength === 0) {
+    return <></>
+  }
 
   return (
     <SliderWrapper ref={containerRef} $width={`${sliderWidth}px`}>
