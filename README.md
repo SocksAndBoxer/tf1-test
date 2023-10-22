@@ -30,6 +30,8 @@ yarn dev
 
 - Image: the thumbnail alt is huge, alt attributes should be shorter, I tried to handle it by truncating the text and adding it in the image title to allow the user to read it
 
+- Mobile: I decided to only make a desktop version to gain time and focus on the slider behavious, the implementation shouldn't be hard since I implemented a prop to handle the slider's length
+
 ### API
 
 - Why put thumbnail inside program, program inside thumnail again creating 'infinite depth' ?
