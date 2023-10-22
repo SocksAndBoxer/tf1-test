@@ -9,10 +9,14 @@ const Program = ({ thumnail, name }: ProgramProps) => {
     <ProgramWrapper>
       <div>
         <img
+          loading='lazy'
           className='program-image'
           src={thumnail.url}
           alt={thumnail.alt}
           title={thumnail.alt}
+          decoding='async'
+          width={200}
+          height={266}
         />
         <img className='plus-icon' src={PlusIcon} alt='Plus Icon' />
       </div>
@@ -43,6 +47,7 @@ const ProgramWrapper = styled.div`
       border-radius: 8px;
       font-size: 14px;
       line-height: 16px;
+      content-visibility: auto;
 
       &:before {
         padding-top: 8px;
