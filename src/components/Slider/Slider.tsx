@@ -6,29 +6,31 @@ import RightArrow from '../../assets/svg/right-arrow.svg'
 type SliderProps = {
   children: ReactNode
   itemLength: number
+  itemWidth: number
 }
 
-const Slider = ({ children, itemLength }: SliderProps) => {
+const Slider = ({ children, itemLength, itemWidth }: SliderProps) => {
   const sliderRef: React.RefObject<HTMLDivElement> = useRef(null)
 
-  const scrollX = (direction = 'right') => {
+  const scrollX = (nextPage = true) => {
     if (sliderRef.current) {
       const { clientWidth } = sliderRef.current
 
       sliderRef.current.scrollTo({
-        left:
-          direction === 'right'
-            ? sliderRef.current.scrollLeft + clientWidth
-            : sliderRef.current.scrollLeft - clientWidth,
+        left: nextPage
+          ? sliderRef.current.scrollLeft + clientWidth
+          : sliderRef.current.scrollLeft - clientWidth,
         behavior: 'smooth',
       })
     }
   }
 
+  const handleClick = (nextPage = true) => {}
+
   return (
-    <SliderWrapper $width={`${itemLength * 200 + 144}px`}>
+    <SliderWrapper $width={`${itemLength * itemWidth + 144}px`}>
       <ArrowContainer
-        onClick={() => scrollX('left')}
+        onClick={() => scrollX(false)}
         $position={'left'}
         className='arrow'
       >
