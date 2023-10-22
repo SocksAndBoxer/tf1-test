@@ -9,6 +9,7 @@ type SliderProps = {
   itemLength: number
   itemWidth: number
   childrenLength: number
+  gapLength?: number
 }
 
 const Slider = ({
@@ -16,12 +17,12 @@ const Slider = ({
   itemLength,
   itemWidth,
   childrenLength,
+  gapLength = 24,
 }: SliderProps) => {
   const [position, setPosition] = useState(0)
   const [hasDebounced, setHasDebounced] = useState(true)
-  const containerRef: React.RefObject<HTMLDivElement> = useRef(null)
   const sliderRef: React.RefObject<HTMLDivElement> = useRef(null)
-  const sliderWidth: number = itemLength * itemWidth + 144
+  const sliderWidth: number = itemLength * itemWidth + itemLength * gapLength
   const pagesLength: number = Math.ceil(childrenLength / 6) - 1
   const debouncedPosition = useDebounce(position, 500)
 
@@ -53,7 +54,7 @@ const Slider = ({
   }
 
   return (
-    <SliderWrapper ref={containerRef} $width={`${sliderWidth}px`}>
+    <SliderWrapper $width={`${sliderWidth}px`}>
       {position > 0 && (
         <ArrowContainer
           onClick={() => scrollX(false)}
@@ -102,6 +103,7 @@ const SliderItems = styled.div`
 `
 
 const ArrowContainer = styled.div<{ $position: string }>`
+  z-index: 1;
   cursor: pointer;
   position: absolute;
   background: #313132;
