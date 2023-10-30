@@ -20,25 +20,23 @@ const Slider = ({
   gapLength = 24,
 }: SliderProps) => {
   const [position, setPosition] = useState(0)
-  const [hasDebounced, setHasDebounced] = useState(true)
   const sliderRef: React.RefObject<HTMLDivElement> = useRef(null)
   const sliderWidth: number = itemLength * itemWidth + itemLength * gapLength
   const pagesLength: number = Math.ceil(childrenLength / 6) - 1
+  const [transitionPosition, setTransitionPosition] = useState(0)
   const debouncedPosition = useDebounce(position, 500)
+  const [hasDebounced, setHasDebounced] = useState(true)
 
   const scrollX = (nextPage = true) => {
-    if (sliderRef.current && hasDebounced) {
-      const { clientWidth } = sliderRef.current
-
-      sliderRef.current.scrollTo({
-        left: nextPage
-          ? sliderRef.current.scrollLeft + clientWidth
-          : sliderRef.current.scrollLeft - clientWidth,
-        behavior: 'smooth',
-      })
-
+    if (hasDebounced) {
       setPosition(prevPosition =>
         nextPage ? (prevPosition += 1) : (prevPosition -= 1)
+      )
+
+      setTransitionPosition(prevTransition =>
+        nextPage
+          ? (prevTransition += sliderWidth)
+          : (prevTransition -= sliderWidth)
       )
 
       setHasDebounced(false)
@@ -64,7 +62,9 @@ const Slider = ({
           <img src={LeftArrow} alt='Left arrow' />
         </ArrowContainer>
       )}
-      <SliderItems ref={sliderRef}>{children}</SliderItems>
+      <SliderItems $transition={transitionPosition} ref={sliderRef}>
+        {children}
+      </SliderItems>
       {position < pagesLength && (
         <ArrowContainer
           onClick={() => scrollX()}
@@ -83,16 +83,17 @@ const SliderWrapper = styled.div<{ $width: string }>`
   margin: 0 auto;
   position: relative;
   height: 266px;
-`
-
-const SliderItems = styled.div`
-  display: flex;
-  gap: 24px;
-  flex-grow: grow;
   overflow: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
+`
 
+const SliderItems = styled.div<{ $transition: number }>`
+  display: flex;
+  gap: 24px;
+  flex-grow: grow;
+  transform: translateX(-${props => props.$transition}px);
+  transition: transform 300ms ease-in-out;
   &::-webkit-scrollbar {
     display: none;
   }
