@@ -82,10 +82,13 @@ const SliderWrapper = styled.div<{ $width: string }>`
   width: ${props => props.$width};
   margin: 0 auto;
   position: relative;
-  height: 266px;
   overflow: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const SliderItems = styled.div<{ $transition: number }>`
@@ -94,6 +97,7 @@ const SliderItems = styled.div<{ $transition: number }>`
   flex-grow: grow;
   transform: translateX(-${props => props.$transition}px);
   transition: transform 300ms ease-in-out;
+
   &::-webkit-scrollbar {
     display: none;
   }
