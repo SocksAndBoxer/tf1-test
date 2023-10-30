@@ -24,7 +24,7 @@ const Slider = ({
   const sliderWidth: number = itemLength * itemWidth + itemLength * gapLength
   const pagesLength: number = Math.ceil(childrenLength / 6) - 1
   const [transitionPosition, setTransitionPosition] = useState(0)
-  const debouncedPosition = useDebounce(position, 500)
+  const debouncedPosition = useDebounce(position, 300)
   const [hasDebounced, setHasDebounced] = useState(true)
 
   const scrollX = (nextPage = true) => {
